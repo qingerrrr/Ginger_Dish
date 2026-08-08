@@ -6,6 +6,12 @@ const paths = {
     </>
   ),
   search: <><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></>,
+  back: <><path d="m15 18-6-6 6-6" /></>,
+  bag: <><path d="M6 8h12l1 13H5L6 8Z" /><path d="M9 9V6a3 3 0 0 1 6 0v3" /></>,
+  user: <><circle cx="12" cy="8" r="4" /><path d="M5 21a7 7 0 0 1 14 0" /></>,
+  notes: <><path d="M6 3h12v18H6z" /><path d="M9 8h6M9 12h6M9 16h4" /></>,
+  lock: <><rect x="5" y="10" width="14" height="11" rx="2" /><path d="M8 10V7a4 4 0 0 1 8 0v3" /></>,
+  arrowRight: <><path d="M5 12h14M14 7l5 5-5 5" /></>,
   bowl: (
     <>
       <path d="M16.4 13.7A6.5 6.5 0 1 0 6.28 6.6c-1.1 3.13-.78 3.9-3.18 6.08A3 3 0 0 0 5 18c4 0 8.4-1.8 11.4-4.3" />

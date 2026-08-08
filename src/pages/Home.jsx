@@ -6,10 +6,9 @@ import CategoryTabs from "../components/CategoryTabs/CategoryTabs";
 import MenuCard from "../components/MenuCard/MenuCard";
 import { categories, menuItems } from "../data/menu";
 
-export default function Home() {
+export default function Home({ cart, onAddToCart, onOpenCart }) {
   const [activeCategory, setActiveCategory] = useState("all");
   const [search, setSearch] = useState("");
-  const [cart, setCart] = useState({});
 
   const filteredItems = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -21,7 +20,6 @@ export default function Home() {
   }, [activeCategory, search]);
 
   const cartCount = Object.values(cart).reduce((total, count) => total + count, 0);
-  const addToCart = (item) => setCart((current) => ({ ...current, [item.id]: (current[item.id] || 0) + 1 }));
 
   return (
     <div className="app-shell">
@@ -51,13 +49,13 @@ export default function Home() {
               <CategoryTabs categories={categories} activeCategory={activeCategory} onSelect={setActiveCategory} />
             </div>
             <div className="menu-grid">
-              {filteredItems.map((item) => <MenuCard key={item.id} item={item} onAdd={addToCart} />)}
+              {filteredItems.map((item) => <MenuCard key={item.id} item={item} onAdd={onAddToCart} />)}
             </div>
             {filteredItems.length === 0 && <div className="empty-state"><span>🍽️</span><h3>No dishes found</h3><p>Try another search or category.</p></div>}
           </section>
         </main>
       </div>
-      <CartButton cartCount={cartCount} />
+      <CartButton cartCount={cartCount} onClick={onOpenCart} />
     </div>
   );
 }
