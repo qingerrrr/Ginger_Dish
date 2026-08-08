@@ -1,0 +1,19 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=League+Spartan:wght@500;600;700&display=swap");
+
+:root {
+  --color-background: #fff8e7;
+  --color-surface: #fffefa;
+  --color-primary: #e8453f;
+  --color-primary-dark: #ca302f;
+  --color-primary-light: #fff0c8;
+  --color-text: #38251d;
+  --color-text-muted: #786960;
+  --color-border: #f4ddb0;
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 15px;
+  --radius-xl: 34px;
+  --shadow-card: 0 9px 22px rgba(117, 70, 24, 0.09), 0 2px 3px rgba(117, 70, 24, 0.05);
+  --font-heading: "League Spartan", sans-serif;
+  --font-body: "Inter", sans-serif;
+}
