@@ -1,10 +1,16 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Home from "./pages/Home";
 import ReviewOrder from "./pages/ReviewOrder";
+import AdminMenu from "./pages/AdminMenu";
+import AdminLogin from "./auth/AdminLogin";
+import AdminProtectedRoute from "./auth/AdminProtectedRoute";
+import useAdminAuth from "./auth/useAdminAuth";
 
 export default function App() {
   const [cart, setCart] = useState({});
+  const [cartItems, setCartItems] = useState({});
   const [path, setPath] = useState(window.location.pathname);
+  const { checkingAuth, isAuthenticated, signIn, signOut } = useAdminAuth();
 
   useEffect(() => {
     const handlePopState = () => setPath(window.location.pathname);
@@ -12,14 +18,17 @@ export default function App() {
     return () => window.removeEventListener("popstate", handlePopState);
   }, []);
 
-  const navigate = (nextPath) => {
-    if (window.location.pathname !== nextPath) window.history.pushState({}, "", nextPath);
+  const navigate = useCallback((nextPath, { replace = false } = {}) => {
+    if (window.location.pathname !== nextPath) {
+      window.history[replace ? "replaceState" : "pushState"]({}, "", nextPath);
+    }
     setPath(nextPath);
     window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  }, []);
 
   const addToCart = (item) => {
     setCart((current) => ({ ...current, [item.id]: (current[item.id] || 0) + 1 }));
+    setCartItems((current) => ({ ...current, [item.id]: item }));
   };
 
   const changeQuantity = (itemId, amount) => {
@@ -34,12 +43,30 @@ export default function App() {
 
   const completeOrder = () => {
     setCart({});
+    setCartItems({});
     navigate("/");
   };
 
   if (path === "/review-order") {
-    return <ReviewOrder cart={cart} onChangeQuantity={changeQuantity} onBack={() => navigate("/")} onOrderComplete={completeOrder} />;
+    return <ReviewOrder cart={cart} menuItems={Object.values(cartItems)} onChangeQuantity={changeQuantity} onBack={() => navigate("/")} onOrderComplete={completeOrder} />;
   }
 
-  return <Home cart={cart} onAddToCart={addToCart} onOpenCart={() => navigate("/review-order")} />;
+  if (path === "/admin/login") {
+    return <AdminLogin checkingAuth={checkingAuth} isAuthenticated={isAuthenticated} navigate={navigate} onSignIn={signIn} />;
+  }
+
+  if (path === "/admin/menu") {
+    const handleLogout = async () => {
+      await signOut();
+      navigate("/admin/login", { replace: true });
+    };
+
+    return (
+      <AdminProtectedRoute checkingAuth={checkingAuth} isAuthenticated={isAuthenticated} navigate={navigate}>
+        <AdminMenu onLogout={handleLogout} />
+      </AdminProtectedRoute>
+    );
+  }
+
+  return <Home cart={cart} onAddToCart={addToCart} onChangeQuantity={changeQuantity} onOpenCart={() => navigate("/review-order")} />;
 }

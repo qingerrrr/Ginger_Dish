@@ -6,8 +6,8 @@ export default function CategoryTabs({ categories, activeCategory, onSelect }) {
       <div className="category-list">
         {categories.map((category) => (
           <button className={`category-tab${activeCategory === category.id ? " category-tab--active" : ""}`} type="button" key={category.id} onClick={() => onSelect(category.id)} aria-pressed={activeCategory === category.id}>
-            <Icon name={category.icon} size={17} />
-            <span>{category.label}</span>
+            <Icon name={category.icon} pathData={category.pathData} size={17} />
+            <span>{category.label || category.name}</span>
           </button>
         ))}
       </div>

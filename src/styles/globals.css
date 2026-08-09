@@ -47,6 +47,13 @@ img {
   background: #fff;
 }
 
+.home-sticky-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #fff;
+}
+
 .app-container {
   width: calc(100% - 28px);
   max-width: 1180px;
@@ -86,7 +93,11 @@ img {
 }
 
 .app-container--menu {
-  padding: 10px 0 48px;
+  padding: 0 0 48px;
+}
+
+.app-container--categories {
+  padding: 10px 0 15px;
 }
 
 .site-header {
@@ -100,6 +111,7 @@ img {
   display: flex;
   align-items: center;
   min-width: 0;
+  margin: 10px 0 30px;
 }
 
 .brand__logo-wrap {
@@ -120,18 +132,18 @@ img {
 }
 
 .brand h1 {
-  padding-left: 10px;
-  padding-top: 20px;
+  padding-left: 10px;  
   color: var(--color-primary-dark);
   font: 700 clamp(1.9rem, 9vw, 2.35rem)/.82 var(--font-heading);
   letter-spacing: -0.045em;
   white-space: nowrap;
+  margin-bottom: 3px;
 }
 
 .brand p {
-  margin: 12px 0 0;
-  color: var(--color-text);
-  font-size: clamp(.86rem, 3.8vw, 1.2rem);
+  margin: 0 0 0 10px;
+  color: var(--color-text-muted);
+  font: 400 clamp(.76rem, 3.4vw, 1rem)/1.4 var(--font-body);
   white-space: nowrap;
 }
 
@@ -231,7 +243,7 @@ img {
 }
 
 .category-section {
-  margin-bottom: 15px;
+  margin-bottom: 0;
 }
 
 .category-tabs {
@@ -299,7 +311,7 @@ img {
 
 .menu-card {
   display: grid;
-  grid-template-columns: minmax(100px, 38%) 1fr;
+  grid-template-columns: 38% minmax(0, 1fr);
   min-height: 150px;
   padding: 0;
   border: 1px solid #f0e5d4;
@@ -342,7 +354,7 @@ img {
 
 .menu-card h3 {
   margin: 0;
-  font: 700 clamp(1rem, 4.7vw, 1.4rem)/1.1 var(--font-heading);
+  font: 700 clamp(1rem, 4vw, 1.4rem)/1.1 var(--font-heading);
   overflow-wrap: anywhere;
 }
 
@@ -351,7 +363,7 @@ img {
   margin: 7px 0 8px;
   overflow: hidden;
   color: var(--color-text-muted);
-  font-size: clamp(.7rem, 3.2vw, .9rem);
+  font-size: clamp(.7rem, 3vw, .9rem);
   line-height: 1.4;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -361,7 +373,15 @@ img {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  min-width: 0;
+  min-height: 40px;
   margin-top: auto;
+}
+
+.menu-card .quantity-control {
+  width: min(116px, 100%);
+  min-width: 0;
+  height: 40px;
 }
 
 .add-button {
@@ -438,7 +458,7 @@ button:focus-visible {
 
 @media (max-width: 359px) {
   .menu-card {
-    grid-template-columns: minmax(92px, 35%) 1fr;
+    grid-template-columns: 35% minmax(0, 1fr);
     min-height: 142px;
   }
 
@@ -462,6 +482,15 @@ button:focus-visible {
     flex-basis: 36px;
     height: 36px;
     border-radius: 50%;
+  }
+
+  .menu-card__actions {
+    min-height: 36px;
+  }
+
+  .menu-card .quantity-control {
+    width: min(104px, 100%);
+    height: 36px;
   }
 
 }
@@ -503,7 +532,7 @@ button:focus-visible {
   }
 
   .menu-card {
-    grid-template-columns: minmax(140px, 39%) 1fr;
+    grid-template-columns: 39% minmax(0, 1fr);
     min-height: 180px;
   }
 
@@ -531,10 +560,6 @@ button:focus-visible {
 
   .brand h1 {
     font-size: 4.5rem;
-  }
-
-  .brand p {
-    font-size: 1.15rem;
   }
 
   .search-box {
@@ -906,6 +931,19 @@ button:focus-visible {
   transform: translateX(-50%);
 }
 
+.place-order-error {
+  margin: 0 8px 8px;
+  padding: 8px 11px;
+  border: 1px solid #efb8b1;
+  border-radius: 10px;
+  color: var(--color-primary-dark);
+  background: #fff;
+  font-size: .7rem;
+  font-weight: 600;
+  text-align: center;
+  box-shadow: var(--shadow-card);
+}
+
 .place-order-button {
   position: relative;
   display: flex;
@@ -921,6 +959,11 @@ button:focus-visible {
   background: var(--color-primary-dark);
   box-shadow: 0 9px 20px rgba(202, 48, 47, .2);
   cursor: pointer;
+}
+
+.place-order-button:disabled {
+  cursor: wait;
+  opacity: .75;
 }
 
 .place-order-mascot {
@@ -1098,3 +1141,819 @@ button:focus-visible {
     min-height: 190px;
   }
 }
+
+/* Admin: Manage Food */
+.admin-page {
+  min-height: 100vh;
+  color: var(--color-text);
+  background: #fffaf2;
+}
+
+.admin-container {
+  width: min(calc(100% - 28px), 1120px);
+  margin-inline: auto;
+  padding: 24px 0 48px;
+}
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-bottom: 20px;
+}
+
+.admin-header__content {
+  min-width: 0;
+}
+
+.admin-header__mascot {
+  flex: 0 0 70px;
+  width: 70px;
+  height: 70px;
+  overflow: hidden;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: var(--shadow-card);
+  cursor: pointer;
+}
+
+.admin-header__mascot img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.admin-header h1 {
+  margin: 0;
+  color: var(--color-primary-dark);
+  font: 700 clamp(1.65rem, 8vw, 2.7rem)/.95 var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: -0.045em;
+}
+
+.admin-header p {
+  margin: 3px 0 0;
+  color: var(--color-text-muted);
+  font-size: clamp(.76rem, 3.4vw, 1rem);
+}
+
+.admin-form-anchor {
+  scroll-margin-top: 14px;
+}
+
+.admin-panel {
+  border: 1px solid var(--color-border);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, .94);
+  box-shadow: var(--shadow-card);
+}
+
+.admin-food-form-panel {
+  margin-bottom: 18px;
+  padding: 20px 16px;
+}
+
+.admin-food-form-panel h2 {
+  margin: 0 0 18px;
+  font: 700 1.3rem/1 var(--font-heading);
+  text-transform: uppercase;
+}
+
+.admin-food-form {
+  display: grid;
+  gap: 20px;
+}
+
+.admin-photo-field,
+.admin-form-fields,
+.admin-form-field {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.admin-form-fields {
+  gap: 15px;
+}
+
+.admin-form-field {
+  flex: 1;
+}
+
+.admin-field-label,
+.admin-form-field>span,
+.admin-halal-field legend {
+  margin-bottom: 8px;
+  font-size: .82rem;
+  font-weight: 700;
+}
+
+.admin-upload {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 190px;
+  padding: 16px;
+  overflow: hidden;
+  border: 1.5px dashed #dfcdb4;
+  border-radius: 14px;
+  background: #fffefa;
+  cursor: pointer;
+}
+
+.admin-upload input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.admin-upload__prompt {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 5px;
+  text-align: center;
+}
+
+.admin-upload__prompt svg {
+  margin-bottom: 4px;
+  color: var(--color-primary-dark);
+}
+
+.admin-upload__prompt strong {
+  font-size: .9rem;
+}
+
+.admin-upload__prompt span {
+  font-size: .82rem;
+}
+
+.admin-upload__prompt small {
+  margin-top: 5px;
+  color: var(--color-text-muted);
+  font-size: .7rem;
+}
+
+.admin-upload--preview {
+  padding: 0;
+  border-style: solid;
+}
+
+.admin-upload--preview img {
+  width: 100%;
+  height: 100%;
+  min-height: 190px;
+  object-fit: cover;
+  object-position: center;
+}
+
+.admin-upload__selection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 8px;
+  color: var(--color-text-muted);
+  font-size: .7rem;
+}
+
+.admin-upload__selection span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-upload__selection button {
+  flex: 0 0 auto;
+  padding: 3px 7px;
+  border: 0;
+  color: var(--color-primary-dark);
+  background: transparent;
+  font: 700 .68rem/1 var(--font-body);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.admin-form-field input,
+.admin-form-field textarea,
+.admin-form-field select {
+  width: 100%;
+  border: 1.5px solid #ead8bc;
+  border-radius: 12px;
+  outline: 0;
+  color: var(--color-text);
+  background: #fff;
+  font: 400 .84rem/1.4 var(--font-body);
+}
+
+.admin-form-field input,
+.admin-form-field select {
+  height: 46px;
+  padding: 0 13px;
+}
+
+.admin-form-field select {
+  padding-right: 40px;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2335241d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 14px;
+}
+
+.admin-form-field textarea {
+  min-height: 88px;
+  padding: 12px 13px;
+  resize: vertical;
+}
+
+.admin-form-field input:focus,
+.admin-form-field textarea:focus,
+.admin-form-field select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(232, 69, 63, .1);
+}
+
+.admin-form-row {
+  display: grid;
+  gap: 15px;
+}
+
+.admin-halal-field {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.admin-halal-field label {
+  display: flex;
+  align-items: center;
+  min-height: 46px;
+  gap: 9px;
+  font: 400 .84rem/1.4 var(--font-body);
+}
+
+.admin-form-field select,
+.admin-form-field select option {
+  font-family: var(--font-body);
+  font-weight: 400;
+}
+
+.admin-halal-field input {
+  width: 19px;
+  height: 19px;
+  accent-color: var(--color-primary-dark);
+}
+
+.admin-field-error {
+  margin: 6px 0 0;
+  color: var(--color-primary-dark);
+  font-size: .7rem;
+  font-weight: 600;
+}
+
+.admin-field-error--slot {
+  display: block;
+  min-height: 1rem;
+  margin: 0 0 6px;
+  line-height: 1rem;
+}
+
+.admin-form-actions,
+.admin-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.admin-button {
+  min-height: 42px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.admin-button:disabled {
+  cursor: wait;
+  opacity: .65;
+}
+
+.admin-button--primary {
+  color: #fff;
+  background: var(--color-primary-dark);
+}
+
+.admin-button--secondary {
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  background: #fffefa;
+}
+
+.admin-button--danger {
+  color: #fff;
+  background: var(--color-primary-dark);
+}
+
+.admin-state {
+  padding: 45px 20px;
+  border: 1px solid var(--color-border);
+  border-radius: 22px;
+  background: #fff;
+  text-align: center;
+  box-shadow: var(--shadow-card);
+}
+
+.admin-state p {
+  margin: 0 0 14px;
+}
+
+.admin-feedback {
+  margin: -6px 0 14px;
+  padding: 10px 13px;
+  border-radius: 11px;
+  font-size: .74rem;
+  font-weight: 600;
+}
+
+.admin-feedback--success {
+  border: 1px solid #a8d6a8;
+  color: #277b32;
+  background: #eef9ec;
+}
+
+.admin-feedback--error {
+  border: 1px solid #efb8b1;
+  color: var(--color-primary-dark);
+  background: #fff0ed;
+}
+
+.admin-food-list {
+  overflow: hidden;
+}
+
+.admin-food-table__head {
+  display: none;
+}
+
+.admin-food-table__body {
+  display: grid;
+}
+
+.admin-food-row {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr) auto;
+  grid-template-areas: "photo name name" "photo tags actions";
+  gap: 9px 13px;
+  padding: 16px;
+}
+
+.admin-food-row+.admin-food-row {
+  border-top: 1px solid #f1e7d9;
+}
+
+.admin-food-row__photo {
+  grid-area: photo;
+}
+
+.admin-food-row__name {
+  grid-area: name;
+  min-width: 0;
+}
+
+.admin-food-tags {
+  grid-area: tags;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.admin-food-row__halal {
+  align-self: center;
+}
+
+.admin-food-row__actions {
+  grid-area: actions;
+  justify-self: end;
+}
+
+.admin-food-image {
+  display: block;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.admin-food-row__name strong {
+  font: 700 1rem/1.15 var(--font-heading);
+}
+
+.admin-food-row__name p {
+  display: -webkit-box;
+  margin: 5px 0 0;
+  overflow: hidden;
+  color: var(--color-text-muted);
+  font-size: .73rem;
+  line-height: 1.45;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.admin-category-badge,
+.admin-halal-badge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  min-height: 30px;
+  padding: 0 10px;
+  border-radius: 10px;
+  font-size: .7rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.admin-category-badge {
+  gap: 6px;
+  background: var(--color-primary-light);
+}
+
+.admin-halal-badge {
+  border: 1px solid #61b96a;
+  color: #278433;
+  background: #eaf8e9;
+  text-transform: uppercase;
+}
+
+.admin-row-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.admin-icon-button {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 0;
+  border-radius: 11px;
+  cursor: pointer;
+}
+
+.admin-icon-button--edit {
+  color: #855012;
+  background: #fff0c8;
+}
+
+.admin-icon-button--delete {
+  color: #c52f2d;
+  background: #ffe0dc;
+}
+
+.admin-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-top: 1px solid #f1e7d9;
+}
+
+.admin-pagination p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: .7rem;
+}
+
+.admin-pagination__controls {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.admin-pagination__controls button,
+.admin-pagination__controls span {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+}
+
+.admin-pagination__controls button {
+  border: 1px solid #eadfce;
+  background: #fff;
+  cursor: pointer;
+  font-size: 1.3rem;
+}
+
+.admin-pagination__controls button:disabled {
+  cursor: default;
+  opacity: .4;
+}
+
+.admin-pagination__controls span {
+  color: #fff;
+  background: var(--color-primary-dark);
+  font-size: .78rem;
+  font-weight: 700;
+}
+
+.admin-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(45, 31, 24, .42);
+}
+
+.admin-delete-modal {
+  width: min(100%, 380px);
+  padding: 24px;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 16px 45px rgba(0, 0, 0, .2);
+}
+
+.admin-delete-modal h2 {
+  margin: 0;
+  font: 700 1.35rem/1.15 var(--font-heading);
+}
+
+.admin-delete-modal p {
+  margin: 8px 0 22px;
+  color: var(--color-text-muted);
+  font-size: .82rem;
+}
+
+@media (min-width: 700px) {
+  .admin-container {
+    padding-top: 34px;
+  }
+
+  .admin-header {
+    gap: 18px;
+    margin-bottom: 24px;
+  }
+
+  .admin-header__mascot {
+    flex-basis: 94px;
+    width: 94px;
+    height: 94px;
+  }
+
+  .admin-food-form-panel {
+    padding: 28px 30px;
+  }
+
+  .admin-food-form {
+    grid-template-columns: 285px minmax(0, 1fr);
+    gap: 34px;
+  }
+
+  .admin-upload,
+  .admin-upload--preview img {
+    min-height: 245px;
+  }
+
+  .admin-form-row {
+    grid-template-columns: minmax(180px, .8fr) minmax(230px, 1.2fr);
+  }
+
+  .admin-form-actions {
+    margin-top: 2px;
+  }
+
+  .admin-button {
+    min-width: 128px;
+  }
+
+  .admin-food-table__head,
+  .admin-food-row {
+    display: grid;
+    grid-template-columns: 150px minmax(250px, 1fr) 190px 110px 110px;
+    align-items: center;
+  }
+
+  .admin-food-table__head {
+    min-height: 66px;
+    padding: 0 28px;
+    font-size: .82rem;
+    font-weight: 700;
+  }
+
+  .admin-food-row {
+    grid-template-areas: none;
+    gap: 0;
+    min-height: 150px;
+    padding: 15px 28px;
+  }
+
+  .admin-food-tags {
+    display: contents;
+  }
+
+  .admin-food-row__photo,
+  .admin-food-row__name,
+  .admin-food-row__category,
+  .admin-food-row__halal,
+  .admin-food-row__actions {
+    grid-area: auto;
+  }
+
+  .admin-food-row__actions {
+    justify-self: start;
+  }
+
+  .admin-food-image {
+    width: 104px;
+    height: 104px;
+  }
+
+  .admin-food-row__name {
+    padding-right: 22px;
+  }
+
+  .admin-food-row__name strong {
+    font-size: 1.05rem;
+  }
+
+  .admin-food-row__name p {
+    max-width: 310px;
+    font-size: .78rem;
+  }
+
+  .admin-pagination {
+    padding: 14px 28px;
+  }
+}
+
+/* Admin authentication: intentionally mobile-sized at every viewport. */
+.admin-auth-loading {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 24px;
+  color: var(--color-text-muted);
+  background: #fff7df;
+  font: 600 .85rem/1.4 var(--font-body);
+}
+
+.admin-login-page {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: max(24px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
+  color: var(--color-text);
+  background: #fff4cf;
+}
+
+.admin-login {
+  width: min(100%, 400px);
+  text-align: center;
+}
+
+.admin-login__mascot {
+  display: block;
+  width: clamp(92px, 29vw, 124px);
+  aspect-ratio: 1;
+  margin: 0 auto 10px;
+  object-fit: contain;
+}
+
+.admin-login h1 {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin: 0 0 22px;
+  color: var(--color-text);
+  font: 700 1.2rem/1.05 var(--font-heading);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.admin-login h1 span {
+  color: var(--color-primary-dark);
+  font-size: clamp(2rem, 10vw, 2.65rem);
+  letter-spacing: -.02em;
+}
+
+.admin-login__card {
+  padding: 24px 20px;
+  border: 1px solid var(--color-border);
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: var(--shadow-card);
+  text-align: left;
+}
+
+.admin-login__card label {
+  display: block;
+  margin: 0 0 8px;
+  font-size: .82rem;
+  font-weight: 700;
+}
+
+.admin-password-field {
+  position: relative;
+}
+
+.admin-password-field input {
+  width: 100%;
+  height: 50px;
+  padding: 0 48px 0 16px;
+  border: 1.5px solid #ead8bc;
+  border-radius: 999px;
+  outline: 0;
+  color: var(--color-text);
+  background: #fffefa;
+  font: 400 .9rem/1 var(--font-body);
+}
+
+.admin-password-field input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(232, 69, 63, .1);
+}
+
+.admin-password-field input[aria-invalid="true"] {
+  border-color: var(--color-primary-dark);
+}
+
+.admin-password-field button {
+  position: absolute;
+  top: 50%;
+  right: 7px;
+  display: grid;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  transform: translateY(-50%);
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  color: var(--color-text-muted);
+  background: transparent;
+  cursor: pointer;
+}
+
+.admin-login__error {
+  min-height: 17px;
+  margin: 7px 3px 0;
+  color: var(--color-primary-dark);
+  font-size: .72rem;
+  font-weight: 600;
+}
+
+.admin-login__submit {
+  width: 100%;
+  min-height: 48px;
+  margin-top: 18px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 14px;
+  color: #fff;
+  background: var(--color-primary-dark);
+  font: 700 .86rem/1 var(--font-body);
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 7px 16px rgba(202, 47, 44, .18);
+}
+
+.admin-login__submit:disabled {
+  cursor: wait;
+  opacity: .68;
+}
+
+.admin-login__submit:focus-visible,
+.admin-password-field button:focus-visible,
+.admin-header__mascot:focus-visible {
+  outline: 3px solid rgba(232, 69, 63, .28);
+  outline-offset: 3px;
+}
+
+@media (max-width: 340px) {
+  .admin-login-page {
+    padding-inline: 12px;
+  }
+
+  .admin-login__card {
+    padding: 21px 16px;
+  }
+}
+
+.home-menu-retry { min-height: 38px; margin-top: 12px; padding: 0 18px; border: 0; border-radius: 999px; color: #fff; background: var(--color-primary-dark); font-weight: 700; cursor: pointer; }

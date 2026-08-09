@@ -4,7 +4,7 @@ export default function ReviewOrderItem({ item, quantity, onChangeQuantity }) {
   return (
     <article className="review-item">
       <div className="review-item__image-wrap menu-card__image-wrap">
-        <img className="review-item__image menu-card__image" src={item.image} alt={item.name} />
+        <img className="review-item__image menu-card__image" src={item.imageUrl} alt={item.name} />
       </div>
       <div className="review-item__content">
         <div className="review-item__info">

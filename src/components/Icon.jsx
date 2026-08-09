@@ -12,6 +12,11 @@ const paths = {
   notes: <><path d="M6 3h12v18H6z" /><path d="M9 8h6M9 12h6M9 16h4" /></>,
   lock: <><rect x="5" y="10" width="14" height="11" rx="2" /><path d="M8 10V7a4 4 0 0 1 8 0v3" /></>,
   arrowRight: <><path d="M5 12h14M14 7l5 5-5 5" /></>,
+  upload: <><path d="M12 16V4M7 9l5-5 5 5" /><path d="M5 14H3v7h18v-7h-2" /></>,
+  edit: <><path d="m4 20 4.2-1 10.6-10.6a2 2 0 0 0-2.8-2.8L5.4 16.2 4 20Z" /><path d="m14.5 7.1 2.8 2.8" /></>,
+  trash: <><path d="M4 7h16M9 7V4h6v3M7 7l1 14h8l1-14M10 11v6M14 11v6" /></>,
+  eye: <><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" /><circle cx="12" cy="12" r="2.5" /></>,
+  eyeOff: <><path d="m3 3 18 18M10.6 6.2A9.7 9.7 0 0 1 12 6c6 0 9.5 6 9.5 6a17 17 0 0 1-2.1 2.8M6.4 6.4C3.9 8.1 2.5 12 2.5 12s3.5 6 9.5 6a9.7 9.7 0 0 0 3.6-.7M9.9 9.9a3 3 0 0 0 4.2 4.2" /></>,
   bowl: (
     <>
       <path d="M16.4 13.7A6.5 6.5 0 1 0 6.28 6.6c-1.1 3.13-.78 3.9-3.18 6.08A3 3 0 0 0 5 18c4 0 8.4-1.8 11.4-4.3" />
@@ -20,7 +25,12 @@ const paths = {
     </>
   ),
   cloche: <><path d="M4 10h16c0 6-3 9-8 9s-8-3-8-9ZM7 7c2-2 3 1 5-1s3 1 5-1" /><path d="M9 21h6" /></>,
-  leaf: <><path d="M19 4C11 4 5 8 5 15c5 1 12-1 14-11Z" /><path d="M5 19c3-5 7-7 12-10" /></>,
+  leaf: (<>
+    <path d="M10 13a3 3 0 0 1-2.121-5.121" />
+    <path d="M15.606 14.204c-3.5 1.5-5.899 4.503-8.899 7.503A1 1 0 0 1 6 22c-2 0-4-2-4-4a1 1 0 0 1 .293-.707c1.911-1.911 3.823-3.578 5.347-5.441" />
+    <path d="M16.573 14.737A4 4 0 0 1 14 11" />
+    <path d="M7.14 10.907a4 4 0 1 1 2.756-7.43A4 4 0 0 1 16.7 4.48a2 2 0 0 1 2.82 2.82 4 4 0 0 1 1.002 6.805A4 4 0 1 1 13 16" />
+  </>),
   drink: <><path d="M7 7h10l-1 14H8L7 7ZM10 7l4-5" /></>,
   halal: <><path d="M15.5 4.5a7.5 7.5 0 1 0 4 12.8 8.5 8.5 0 1 1-4-12.8Z" /><path d="m17.5 7 .6 1.3 1.4.2-1 1 .2 1.4-1.2-.7-1.3.7.3-1.4-1-1 1.4-.2.6-1.3Z" /></>,
   cupcake: (
@@ -32,6 +42,9 @@ const paths = {
   ),
 };
 
-export default function Icon({ name, size = 24 }) {
-  return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths[name]}</svg>;
+export default function Icon({ name, size = 24, pathData }) {
+  const content = pathData?.length
+    ? pathData.map((path, index) => <path d={path} key={`${index}-${path}`} />)
+    : paths[name];
+  return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{content}</svg>;
 }

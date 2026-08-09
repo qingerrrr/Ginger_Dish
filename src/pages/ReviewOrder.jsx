@@ -6,12 +6,14 @@ import emptyCartImage from "../../Images/empty_bag.png";
 import orderReceivedImage from "../../Images/order_received.png";
 import Icon from "../components/Icon";
 import ReviewOrderItem from "../components/ReviewOrderItem/ReviewOrderItem";
-import { menuItems } from "../data/menu";
+import { orderService } from "../services/orderService";
 
-export default function ReviewOrder({ cart, onChangeQuantity, onBack, onOrderComplete }) {
+export default function ReviewOrder({ cart, menuItems, onChangeQuantity, onBack, onOrderComplete }) {
   const [customerName, setCustomerName] = useState("");
   const [orderNotes, setOrderNotes] = useState("");
   const [nameError, setNameError] = useState("");
+  const [submitError, setSubmitError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const [showOrderSuccess, setShowOrderSuccess] = useState(false);
   const cartItems = menuItems.filter((item) => cart[item.id] > 0);
 
@@ -22,13 +24,26 @@ export default function ReviewOrder({ cart, onChangeQuantity, onBack, onOrderCom
     return () => { document.body.style.overflow = previousOverflow; };
   }, [showOrderSuccess]);
 
-  const handlePlaceOrder = () => {
+  const handlePlaceOrder = async () => {
+    if (submitting) return;
     if (!customerName.trim()) {
       setNameError("Name, Please!");
       return;
     }
     setNameError("");
-    setShowOrderSuccess(true);
+    setSubmitError("");
+    setSubmitting(true);
+    try {
+      await orderService.createOrder({
+        visitorName: customerName,
+        items: cartItems.map((item) => ({ foodId: item.id, quantity: cart[item.id] })),
+      });
+      setShowOrderSuccess(true);
+    } catch (orderError) {
+      setSubmitError(orderError.message || "Unable to place your order. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleCloseOrderSuccess = () => {
@@ -36,6 +51,7 @@ export default function ReviewOrder({ cart, onChangeQuantity, onBack, onOrderCom
     setCustomerName("");
     setOrderNotes("");
     setNameError("");
+    setSubmitError("");
     onOrderComplete();
   };
 
@@ -81,13 +97,14 @@ export default function ReviewOrder({ cart, onChangeQuantity, onBack, onOrderCom
                 <span><strong>WHO'S ORDERING?</strong><small>Pop your name in below!</small></span>
               </label>
               <p className={`review-field-error${nameError ? "" : " review-field-error--placeholder"}`} id="customer-name-error" role={nameError ? "alert" : undefined} aria-hidden={!nameError}>{nameError || "\u00a0"}</p>
-              <input id="customer-name" value={customerName} onChange={(event) => { setCustomerName(event.target.value); if (nameError) setNameError(""); }} placeholder="e.g. Ginger Tea" required aria-invalid={Boolean(nameError)} aria-describedby={nameError ? "customer-name-error" : undefined} />
+              <input id="customer-name" value={customerName} onChange={(event) => { setCustomerName(event.target.value); if (nameError) setNameError(""); if (submitError) setSubmitError(""); }} placeholder="e.g. Ginger Tea" required aria-invalid={Boolean(nameError)} aria-describedby={nameError ? "customer-name-error" : undefined} />
             </section>
 
             <div className="place-order-wrapper">
-              <button className="place-order-button" type="button" onClick={handlePlaceOrder}>
+              {submitError && <p className="place-order-error" role="alert">{submitError}</p>}
+              <button className="place-order-button" type="button" onClick={handlePlaceOrder} disabled={submitting}>
                 <img className="place-order-mascot" src={reviewMascot} alt="" />
-                <span className="place-order-label">Place Order</span>
+                <span className="place-order-label">{submitting ? "Placing..." : "Place Order"}</span>
                 <span className="place-order-arrow"><Icon name="arrowRight" size={28} /></span>
               </button>
             </div>

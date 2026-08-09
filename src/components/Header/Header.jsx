@@ -7,7 +7,7 @@ export default function Header() {
         <div className="brand__logo-wrap"><img className="brand__logo" src={logo} alt="GingerDish penguin chef mascot" /></div>
         <div className="brand__copy">
           <h1>GINGER DISH</h1>
-          {/* <p>welcome to our restaurant!</p> */}
+          <p>From qing's little kitchen to you</p>
         </div>
       </div>
     </header>
