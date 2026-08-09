@@ -39,7 +39,7 @@ export default function AdminLogin({ checkingAuth, isAuthenticated, navigate, on
     <main className="admin-login-page">
       <section className="admin-login" aria-labelledby="admin-login-title">
         <img className="admin-login__mascot" src={logo} alt="GingerDish chef mascot" />
-        <h1 id="admin-login-title"><span>GingerDish</span> Admin</h1>
+        <h1 id="admin-login-title"><span>Ginger Dish</span> Admin</h1>
 
         <form className="admin-login__card" onSubmit={handleSubmit} noValidate>
           <label htmlFor="admin-password">Password</label>
