@@ -1,4 +1,6 @@
 import { supabase } from "../lib/supabase";
+import { submitOrderWithNotification } from "./orderSubmission";
+import { telegramNotificationService } from "./telegramNotificationService";
 
 export class OrderServiceError extends Error {
   constructor(message, code = "ORDER_CREATE_FAILED") {
@@ -42,22 +44,28 @@ function logFailure(step, error) {
 export const orderService = {
   async createOrder({ visitorName, items }) {
     const normalized = normalizeOrder(visitorName, items);
-    const { data, error } = await supabase.rpc("place_order", {
-      p_visitor_name: normalized.visitorName,
-      p_items: normalized.items,
-    });
+    return submitOrderWithNotification({
+      placeOrder: async () => {
+        const { data, error } = await supabase.rpc("place_order", {
+          p_visitor_name: normalized.visitorName,
+          p_items: normalized.items,
+        });
 
-    if (error) {
-      logFailure("place_order RPC", error);
-      throw new OrderServiceError("Unable to create your order. Please try again.", "ORDER_CREATE_FAILED");
-    }
+        if (error) {
+          logFailure("place_order RPC", error);
+          throw new OrderServiceError("Unable to create your order. Please try again.", "ORDER_CREATE_FAILED");
+        }
 
-    const orderId = Number(data?.order_id ?? data);
-    if (!Number.isInteger(orderId) || orderId <= 0) {
-      logFailure("place_order result validation", { data });
-      throw new OrderServiceError("Unable to create your order. Please try again.", "INVALID_ORDER_ID");
-    }
+        const orderId = Number(data?.order_id ?? data);
+        if (!Number.isInteger(orderId) || orderId <= 0) {
+          logFailure("place_order result validation", { data });
+          throw new OrderServiceError("Unable to create your order. Please try again.", "INVALID_ORDER_ID");
+        }
 
-    return { orderId };
+        return { orderId };
+      },
+      notifyOrder: ({ orderId }) => telegramNotificationService.notifyOrderPlaced(orderId),
+      onNotificationError: (error) => logFailure("Telegram notification", error),
+    }, normalized);
   },
 };
