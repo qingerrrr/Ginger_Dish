@@ -4,6 +4,7 @@ import AdminFoodForm from "../components/AdminFoodForm/AdminFoodForm";
 import AdminFoodList from "../components/AdminFoodList/AdminFoodList";
 import DeleteFoodModal from "../components/DeleteFoodModal/DeleteFoodModal";
 import useMenuItems from "../hooks/useMenuItems";
+import { adminButtonStyles } from "../styles/adminClasses";
 
 const pageSize = 4;
 
@@ -59,28 +60,28 @@ export default function AdminMenu({ onLogout }) {
   };
 
   return (
-    <div className="admin-page">
-      <main className="admin-container">
-        <header className="admin-header">
+    <div className="min-h-screen bg-[#fffaf2] text-ginger-text">
+      <main className="mx-auto w-[calc(100%-28px)] max-w-[1120px] pt-6 pb-12 md:pt-[34px]">
+        <header className="mb-5 flex items-center gap-[13px] md:mb-6 md:gap-[18px]">
           <button className="admin-header__mascot" type="button" onClick={onLogout} aria-label="Logout">
             <img src={logo} alt="GingerDish chef mascot" />
           </button>
-          <div className="admin-header__content">
-            <h1>Manage Food</h1>
-            <p>Add, edit or delete food items from the menu</p>
+          <div className="min-w-0">
+            <h1 className="m-0 text-ginger-red-dark font-ginger-heading text-[clamp(1.65rem,8vw,2.7rem)] leading-[.95] font-bold tracking-[-.045em] uppercase">Manage Food</h1>
+            <p className="mt-[3px] mb-0 text-ginger-muted text-[clamp(.76rem,3.4vw,1rem)]">Add, edit or delete food items from the menu</p>
           </div>
         </header>
 
-        <div ref={formRef} className="admin-form-anchor">
+        <div ref={formRef} className="scroll-mt-[14px]">
           <AdminFoodForm categories={categories} editingItem={editingItem} onSubmit={handleSave} onCancelEdit={() => setEditingItem(null)} />
         </div>
 
-        {feedback && <p className="admin-feedback admin-feedback--success" role="status">{feedback}</p>}
-        {operationError && <p className="admin-feedback admin-feedback--error" role="alert">{operationError}</p>}
+        {feedback && <p className="mt-[-6px] mb-3.5 rounded-[11px] border border-[#a8d6a8] bg-[#eef9ec] px-[13px] py-2.5 text-[.74rem] font-semibold text-[#277b32]" role="status">{feedback}</p>}
+        {operationError && <p className="mt-[-6px] mb-3.5 rounded-[11px] border border-[#efb8b1] bg-[#fff0ed] px-[13px] py-2.5 text-[.74rem] font-semibold text-ginger-red-dark" role="alert">{operationError}</p>}
 
-        {loading && <div className="admin-state">Loading food...</div>}
-        {!loading && error && <div className="admin-state"><p>{error}</p><button className="admin-button admin-button--primary" type="button" onClick={refresh}>Retry</button></div>}
-        {!loading && !error && items.length === 0 && <div className="admin-state">No food items added yet.</div>}
+        {loading && <div className="rounded-[22px] border border-ginger-border bg-white px-5 py-[45px] text-center shadow-ginger-card">Loading food...</div>}
+        {!loading && error && <div className="rounded-[22px] border border-ginger-border bg-white px-5 py-[45px] text-center shadow-ginger-card"><p className="mb-3.5">{error}</p><button className={adminButtonStyles.primary} type="button" onClick={refresh}>Retry</button></div>}
+        {!loading && !error && items.length === 0 && <div className="rounded-[22px] border border-ginger-border bg-white px-5 py-[45px] text-center shadow-ginger-card">No food items added yet.</div>}
         {!loading && !error && items.length > 0 && (
           <AdminFoodList items={visibleItems} categories={categories} page={page} pageSize={pageSize} totalItems={items.length} onPageChange={setPage} onEdit={handleEdit} onDelete={setDeleteTarget} />
         )}

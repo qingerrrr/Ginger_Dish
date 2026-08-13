@@ -6,7 +6,7 @@ export default function AdminProtectedRoute({ checkingAuth, isAuthenticated, nav
   }, [checkingAuth, isAuthenticated, navigate]);
 
   if (checkingAuth || !isAuthenticated) {
-    return <main className="admin-auth-loading" aria-live="polite">Checking admin session...</main>;
+    return <main className="grid min-h-screen place-items-center bg-[#fff7df] p-6 text-center font-ginger-body text-[.85rem] leading-[1.4] font-semibold text-ginger-muted" aria-live="polite">Checking admin session...</main>;
   }
 
   return children;

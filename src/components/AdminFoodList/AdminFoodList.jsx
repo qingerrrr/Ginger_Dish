@@ -1,4 +1,5 @@
 import Icon from "../Icon";
+import { adminPanelClass } from "../../styles/adminClasses";
 
 function CategoryBadge({ item, categories }) {
   const category = item.category || categories.find(({ id }) => id === item.categoryId);
@@ -25,7 +26,7 @@ export default function AdminFoodList({ items, categories, page, pageSize, total
   const lastItem = Math.min(page * pageSize, totalItems);
 
   return (
-    <section className="admin-panel admin-food-list" aria-label="Existing food items">
+    <section className={`${adminPanelClass} overflow-hidden`} aria-label="Existing food items">
       <div className="admin-food-table" role="table" aria-label="Food menu">
         <div className="admin-food-table__head" role="row">
           <span role="columnheader">Photo</span><span role="columnheader">Name</span><span role="columnheader">Category</span><span role="columnheader">Halal</span><span role="columnheader">Actions</span>

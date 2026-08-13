@@ -69,9 +69,13 @@ export const menuService = {
 
   async createMenuItem(data) {
     const uploadedPath = await uploadFoodImage(data.imageFile);
+    const createPayload = {
+      ...toMenuPayload(data, uploadedPath),
+      date_created: new Date().toISOString(),
+    };
     const { data: created, error } = await supabase
       .from("menu")
-      .insert(toMenuPayload(data, uploadedPath))
+      .insert(createPayload)
       .select(menuColumns)
       .single();
 

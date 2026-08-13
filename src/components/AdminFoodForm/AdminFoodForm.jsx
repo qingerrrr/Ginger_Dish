@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Icon from "../Icon";
 import { acceptedFoodImageTypes, maxFoodImageSize, validateFoodImage } from "../../services/foodImageService";
+import { adminButtonStyles, adminPanelClass } from "../../styles/adminClasses";
 
 const emptyForm = { name: "", description: "", categoryId: "", halal: false };
 
@@ -106,8 +107,8 @@ export default function AdminFoodForm({ categories, editingItem, onSubmit, onCan
   };
 
   return (
-    <section className="admin-panel admin-food-form-panel" aria-labelledby="admin-form-title">
-      <h2 id="admin-form-title">{editingItem ? "Edit Food" : "Add New Food"}</h2>
+    <section className={`${adminPanelClass} mb-[18px] px-4 py-5 md:px-[30px] md:py-7`} aria-labelledby="admin-form-title">
+      <h2 className="mt-0 mb-[18px] font-ginger-heading text-[1.3rem] leading-none font-bold uppercase" id="admin-form-title">{editingItem ? "Edit Food" : "Add New Food"}</h2>
       <form className="admin-food-form" onSubmit={handleSubmit} noValidate>
         <div className="admin-photo-field">
           <span className="admin-field-label">1. Photo</span>
@@ -171,8 +172,8 @@ export default function AdminFoodForm({ categories, editingItem, onSubmit, onCan
 
           <FieldMessage message={errors.form} />
           <div className="admin-form-actions">
-            <button className="admin-button admin-button--secondary" type="button" onClick={handleCancel} disabled={saving}>Cancel</button>
-            <button className="admin-button admin-button--primary" type="submit" disabled={saving}>{saving ? (editingItem ? "Saving..." : "Adding...") : editingItem ? "Save Changes" : "Add Food"}</button>
+            <button className={adminButtonStyles.secondary} type="button" onClick={handleCancel} disabled={saving}>Cancel</button>
+            <button className={adminButtonStyles.primary} type="submit" disabled={saving}>{saving ? (editingItem ? "Saving..." : "Adding...") : editingItem ? "Save Changes" : "Add Food"}</button>
           </div>
         </div>
       </form>

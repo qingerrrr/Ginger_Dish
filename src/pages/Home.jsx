@@ -99,10 +99,10 @@ export default function Home({ cart, onAddToCart, onChangeQuantity, onOpenCart }
   const cartCount = Object.values(cart).reduce((total, count) => total + count, 0);
 
   return (
-    <div className="app-shell">
-      <div className="home-sticky-nav" ref={stickyNavRef}>
-        <div className="top-section">
-          <div className="app-container app-container--top">
+    <div className="min-h-screen bg-white">
+      <div className="sticky top-0 z-[100] bg-white" ref={stickyNavRef}>
+        <div className="top-section relative overflow-hidden bg-[#fff1c4]">
+          <div className="relative z-[1] mx-auto w-[calc(100%-28px)] max-w-[1180px] pt-5 md:pt-[46px]">
             <Header />
             <SearchBar value={search} onChange={setSearch} />
           </div>
@@ -119,15 +119,15 @@ export default function Home({ cart, onAddToCart, onChangeQuantity, onOpenCart }
             <path className="top-section__wave-fill" transform="translate(0 4)" d="M0 7 C16 6 22 1 35 4 C49 8 55 14 68 8 C81 2 89 3 100 10 L100 24 L0 24 Z" />
           </svg>
         </div>
-        <div className="app-container app-container--categories">
-          <div className="category-section">
+        <div className="mx-auto w-[calc(100%-28px)] max-w-[1180px] pt-2.5 pb-[15px]">
+          <div>
             <CategoryTabs categories={visibleCategoryGroups} activeCategory={activeCategory} onSelect={handleCategorySelect} />
           </div>
         </div>
       </div>
-      <div className="app-container app-container--menu">
+      <div className="mx-auto w-[calc(100%-28px)] max-w-[1180px] pb-12 lg:pb-[72px]">
         <main>
-          <section className="menu-section" aria-labelledby="menu-heading">
+          <section className="mx-[-14px] bg-transparent px-2.5 pb-3.5 md:mx-0 md:px-5 md:pb-5" aria-labelledby="menu-heading">
             <h2 id="menu-heading" className="sr-only">Our menu</h2>
             {loading && <div className="empty-state" role="status"><h3>Loading menu...</h3></div>}
             {!loading && error && (
@@ -140,15 +140,15 @@ export default function Home({ cart, onAddToCart, onChangeQuantity, onOpenCart }
             {!loading && !error && items.length === 0 && <div className="empty-state"><h3>No dishes available</h3><p>Please check back soon</p></div>}
             {!loading && !error && items.length > 0 && hasVisibleItems && visibleCategoryGroups.map((group) => (
               <section
-                className="menu-category-group"
+                className="menu-category-group pb-6 pt-7 first-of-type:pt-2.5"
                 data-category-id={group.id}
                 key={group.id}
                 ref={(node) => setCategorySectionRef(group.id, node)}
                 style={{ scrollMarginTop: stickyHeight }}
                 aria-labelledby={`menu-category-${group.id}`}
               >
-                <h2 id={`menu-category-${group.id}`} className="menu-category-title">{group.label || group.name}</h2>
-                <div className="menu-grid">
+                <h2 id={`menu-category-${group.id}`} className="mx-2.5 mb-3 text-ginger-text font-ginger-heading text-[clamp(1.2rem,5vw,1.55rem)] leading-[1.1] font-bold tracking-[-.045em] uppercase">{group.label || group.name}</h2>
+                <div className="grid gap-4 md:grid-cols-2 md:gap-5">
                   {group.items.map((item) => <MenuCard key={item.id} item={item} quantity={cart[item.id] || 0} onAdd={onAddToCart} onChangeQuantity={onChangeQuantity} />)}
                 </div>
               </section>
