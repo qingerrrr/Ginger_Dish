@@ -1,7 +1,8 @@
 import { supabase } from "../lib/supabase";
 import { deleteFoodImage, getFoodImageUrl, uploadFoodImage } from "./foodImageService";
+import { isNewMenuItem } from "./menuRecency";
 
-const menuColumns = "food_id, name, description, category_id, pic, halal";
+const menuColumns = "food_id, name, description, category_id, pic, halal, date_created";
 
 export class MenuServiceError extends Error {
   constructor(message, code = "MENU_OPERATION_FAILED") {
@@ -20,6 +21,7 @@ export function mapMenuRow(row) {
     imagePath: row.pic || "",
     imageUrl: getFoodImageUrl(row.pic),
     halal: Boolean(row.halal),
+    dateCreated: row.date_created || null,
   };
 }
 
@@ -54,6 +56,8 @@ async function removeUploadedImageQuietly(objectPath) {
 }
 
 export const menuService = {
+  isNewItem: isNewMenuItem,
+
   async getMenuItems() {
     const { data, error } = await supabase
       .from("menu")

@@ -309,6 +309,23 @@ img {
   gap: 16px;
 }
 
+.menu-category-group {
+  padding-top: 28px;
+  padding-bottom: 24px;
+}
+
+.menu-category-group:first-of-type {
+  padding-top: 10px;
+}
+
+.menu-category-title {
+  margin: 0 10px 12px;
+  color: var(--color-text);
+  font: 700 clamp(1.2rem, 5vw, 1.55rem)/1.1 var(--font-heading);
+  letter-spacing: -.045em;
+  text-transform: uppercase;
+}
+
 .menu-card {
   display: grid;
   grid-template-columns: 38% minmax(0, 1fr);
