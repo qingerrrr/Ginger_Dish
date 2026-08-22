@@ -16,7 +16,9 @@ export default function Home({ cart, onAddToCart, onChangeQuantity, onOpenCart }
   const [stickyHeight, setStickyHeight] = useState(0);
   const { items, categories, loading, error, refresh } = useMenuItems();
   const stickyNavRef = useRef(null);
+  const categoryListRef = useRef(null);
   const categorySectionRefs = useRef(new Map());
+  const activeCategoryRef = useRef(activeCategory);
   const programmaticScrollRef = useRef(false);
   const scrollGuardTimerRef = useRef(null);
 
@@ -42,11 +44,33 @@ export default function Home({ cart, onAddToCart, onChangeQuantity, onOpenCart }
   );
   const hasVisibleItems = visibleCategoryGroups.length > 0;
 
+  const revealCategoryChip = useCallback((categoryId) => {
+    const list = categoryListRef.current;
+    if (!list) return;
+
+    const activeChip = [...list.querySelectorAll("[data-category-id]")]
+      .find((chip) => chip.dataset.categoryId === String(categoryId));
+    if (!activeChip) return;
+
+    const listRect = list.getBoundingClientRect();
+    const chipRect = activeChip.getBoundingClientRect();
+    if (chipRect.left >= listRect.left && chipRect.right <= listRect.right) return;
+
+    list.scrollTo({
+      left: activeChip.offsetLeft - ((list.clientWidth - activeChip.offsetWidth) / 2),
+      behavior: "smooth",
+    });
+  }, []);
+
   useEffect(() => {
     if (!visibleCategoryGroups.length) return;
     const activeIsVisible = visibleCategoryGroups.some(({ id }) => id === activeCategory);
     if (!activeIsVisible) setActiveCategory(visibleCategoryGroups[0].id);
   }, [activeCategory, visibleCategoryGroups]);
+
+  useEffect(() => {
+    activeCategoryRef.current = activeCategory;
+  }, [activeCategory]);
 
   useEffect(() => {
     if (!stickyNavRef.current) return undefined;
@@ -67,7 +91,11 @@ export default function Home({ cart, onAddToCart, onChangeQuantity, onOpenCart }
       if (!visible.length) return;
       const categoryId = visible[0].target.dataset.categoryId;
       const category = visibleCategoryGroups.find(({ id }) => String(id) === categoryId);
-      if (category) setActiveCategory(category.id);
+      if (category && category.id !== activeCategoryRef.current) {
+        activeCategoryRef.current = category.id;
+        setActiveCategory(category.id);
+        revealCategoryChip(category.id);
+      }
     }, {
       rootMargin: `-${stickyHeight}px 0px -55% 0px`,
       threshold: 0,
@@ -75,7 +103,7 @@ export default function Home({ cart, onAddToCart, onChangeQuantity, onOpenCart }
 
     categorySectionRefs.current.forEach((section) => observer.observe(section));
     return () => observer.disconnect();
-  }, [error, loading, stickyHeight, visibleCategoryGroups]);
+  }, [error, loading, revealCategoryChip, stickyHeight, visibleCategoryGroups]);
 
   useEffect(() => () => clearTimeout(scrollGuardTimerRef.current), []);
 
@@ -87,6 +115,7 @@ export default function Home({ cart, onAddToCart, onChangeQuantity, onOpenCart }
   const handleCategorySelect = useCallback((categoryId) => {
     const section = categorySectionRefs.current.get(categoryId);
     if (!section) return;
+    activeCategoryRef.current = categoryId;
     setActiveCategory(categoryId);
     programmaticScrollRef.current = true;
     section.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -121,7 +150,7 @@ export default function Home({ cart, onAddToCart, onChangeQuantity, onOpenCart }
         </div>
         <div className="mx-auto w-[calc(100%-28px)] max-w-[1180px] pt-2.5 pb-[15px]">
           <div>
-            <CategoryTabs categories={visibleCategoryGroups} activeCategory={activeCategory} onSelect={handleCategorySelect} />
+            <CategoryTabs categories={visibleCategoryGroups} activeCategory={activeCategory} onSelect={handleCategorySelect} listRef={categoryListRef} />
           </div>
         </div>
       </div>

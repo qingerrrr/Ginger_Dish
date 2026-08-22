@@ -28,10 +28,17 @@ export function mapMenuRow(row) {
 function toMenuPayload(data, pic) {
   return {
     name: data.name.trim(),
-    description: data.description.trim(),
+    description: data.description,
     category_id: Number(data.categoryId),
     pic,
     halal: Boolean(data.halal),
+  };
+}
+
+function toCreateMenuPayload(data, pic) {
+  return {
+    ...toMenuPayload(data, pic),
+    date_created: new Date().toISOString(),
   };
 }
 
@@ -69,13 +76,9 @@ export const menuService = {
 
   async createMenuItem(data) {
     const uploadedPath = await uploadFoodImage(data.imageFile);
-    const createPayload = {
-      ...toMenuPayload(data, uploadedPath),
-      date_created: new Date().toISOString(),
-    };
     const { data: created, error } = await supabase
       .from("menu")
-      .insert(createPayload)
+      .insert(toCreateMenuPayload(data, uploadedPath))
       .select(menuColumns)
       .single();
 
